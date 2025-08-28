@@ -1,0 +1,163 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Courses</title>
+</head>
+<body>
+<h2>Courses</h2>
+<a th:href="@{/courses/add}">+ Add Courses</a> | 
+<a th:href="@{/students}">View Students</a>
+<br>
+<br>
+<table>
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Description</th>
+			<th>Enrolled Students</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr th:each="course: ${courses}">
+			<td th:text="${course.title}"></td>
+			<td th:text="${course.description}"></td>
+			<td>
+				<span th:each="student: ${course.studentDetails}" th:text="${student.studentname}+' '"></span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Courses</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #74ebd5, #9face6);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .container {
+        background: #fff;
+        padding: 25px 35px;
+        border-radius: 15px;
+        box-shadow: 0px 6px 15px rgba(0,0,0,0.2);
+        width: 80%;
+        max-width: 900px;
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    h2 {
+        text-align: center;
+        color: #4a4a4a;
+        margin-bottom: 20px;
+    }
+
+    .actions {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .actions a {
+        text-decoration: none;
+        background: #6c63ff;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 10px;
+        margin: 0 8px;
+        font-size: 14px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .actions a:hover {
+        background: #574b90;
+        transform: scale(1.05);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #6c63ff;
+        color: white;
+        font-size: 15px;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+        transition: 0.3s;
+    }
+
+    td span {
+        background: #e0e7ff;
+        padding: 4px 8px;
+        border-radius: 6px;
+        margin: 2px;
+        display: inline-block;
+        font-size: 13px;
+        color: #333;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>📘 Courses</h2>
+
+    <div class="actions">
+        <a th:href="@{/courses/add}">➕ Add Course</a>
+        <a th:href="@{/students}">👨‍🎓 View Students</a>
+    </div>
+
+	<div th:if="${successMessage}" 
+     style="background-color: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; border: 1px solid #c3e6cb; border-radius: 5px;">
+    <p th:text="${successMessage}"></p>
+	</div>
+	
+    <table>
+        <thead >
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Enrolled Students</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="course: ${courses}">
+                <td th:text="${course.title}"></td>
+                <td th:text="${course.description}"></td>
+                <td>
+                    <span th:each="student: ${course.studentDetails}" th:text="${student.studentname}"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
