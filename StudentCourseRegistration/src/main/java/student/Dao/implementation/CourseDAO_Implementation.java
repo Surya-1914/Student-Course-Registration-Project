@@ -37,13 +37,19 @@ public class CourseDAO_Implementation implements courseDAO
 	@Override
 	public void deleteByCourseId(Long courseId)
 	{
-		courseRepository.deleteById(courseId);
+		courseRepository.deleteByCourseid(courseId);
 	}
 
 	@Override
 	public boolean existsByTitle(String title) 
 	{
 		return courseRepository.existsByTitle(title);
+	}
+
+	@Override
+	public Course_Details updateCourseDetails(Course_Details course_Details)
+	{
+		return courseRepository.save(course_Details);
 	}
 
 }

@@ -64,5 +64,11 @@ public class StudentServiceImplementation implements StudentService
 		
 	}
 
+	@Override
+	public StudentEntity updateByStudent(StudentEntity studentEntity)
+	{
+		return studentDao.updateByStudent(studentEntity);
+	}
+
 }
 

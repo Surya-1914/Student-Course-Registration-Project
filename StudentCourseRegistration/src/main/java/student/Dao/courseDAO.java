@@ -13,6 +13,7 @@ public interface courseDAO
 	Course_Details save(Course_Details course_Details);
 	void deleteByCourseId(Long courseId);
 	boolean existsByTitle(String title);
+	Course_Details updateCourseDetails(Course_Details course_Details);
 }
 
 

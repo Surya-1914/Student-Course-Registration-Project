@@ -10,6 +10,7 @@ public interface CourseService
     Course_Details getCourseId(Long course_id);
     Course_Details saveCourse(Course_Details courseDetails);
     void deleteCourseId(Long course_id);
+    Course_Details updateCourseDetails(Course_Details course_Details);
 
 }
 

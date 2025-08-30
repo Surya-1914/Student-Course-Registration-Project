@@ -46,4 +46,10 @@ public class StudentDAO_implementation implements StudentDao
 		return studentRepository.existsByStudentemailid(emailid);
 	}
 
+	@Override
+	public StudentEntity updateByStudent(StudentEntity studentEntity) 
+	{
+		return studentRepository.save(studentEntity);
+	}
+
 }

@@ -95,18 +95,32 @@
     .btn-primary {
         background-color: #007bff;
         color: white;
+        border: none;
     }
     .btn-primary:hover {
         background-color: #0056b3;
         transform: translateY(-2px);
+        border: none;
     }
     .btn-secondary {
-        background-color: #6c757d;
+        background-color:  rgb(0, 240, 0);
         color: white;
+        border: none;
     }
     .btn-secondary:hover {
-        background-color: #565e64;
+        background-color: rgb(0, 200, 0);
         transform: translateY(-2px);
+        border: none;
+    }
+    .btn-third {
+        background-color:  rgb(240, 0, 0);
+        color: white;
+        border: none;
+    }
+    .btn-third:hover {
+        background-color: rgb(200, 0, 0);
+        transform: translateY(-2px);
+        border: none;
     }
     #searchInput {
         width: calc(100% - 20px);
@@ -187,6 +201,10 @@
                 th:data-email="${student.studentemailid}"
                 th:data-courses="${#strings.listJoin(student.courses.![title], ',')}"
                 th:text="${student.studentname}">
+                
+                <!-- <form th:action="@/delete/{id}">
+                	<button type="submit">Delete</button>
+                </form> -->
             </li>
         </ul>
     </div>
@@ -220,7 +238,15 @@
                 <ul>
                     ${courses.length > 0 ? courses.map(c => `<li>${c}</li>`).join('') : "<li>No courses enrolled</li>"}
                 </ul>
-                <a href="/students/enroll/${id}" class="btn btn-primary">Enroll</a>
+                <a href="/students/enroll/${id}" class="btn btn-primary">📝 Enroll</a>
+                
+            	<form action="/students/update/${id}" method="get" style="display:inline;">
+        			<button type="submit" class="btn btn-secondary">✏️ Update</button>
+        		</form>
+        		
+        		<form action="/students/delete/${id}" method="post" style="display:inline;">
+        			<button type="submit" class="btn btn-third">🗑 Delete</button>
+        		</form>
             `;
             studentDetails.classList.add('show');
         }, 200);

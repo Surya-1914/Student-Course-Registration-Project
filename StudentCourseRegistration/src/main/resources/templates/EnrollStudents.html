@@ -23,7 +23,6 @@
 </body>
 </html> -->
  
- 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -31,27 +30,46 @@
     <title>Enroll Students</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
         .container {
             width: 450px;
-            margin: 50px auto;
             background: #fff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 6px 15px rgba(0,0,0,0.15);
+            animation: fadeIn 0.8s ease-in-out;
+            transition: 0.3s;
+        }
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 10px 20px rgba(0,0,0,0.2);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         h2 {
             text-align: center;
             color: #333;
+            margin-bottom: 10px;
         }
         p {
             font-size: 16px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            color: #555;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #00796B;
         }
         label {
             font-weight: bold;
@@ -61,14 +79,20 @@
         }
         select {
             width: 100%;
-            padding: 10px;
-            border-radius: 6px;
+            padding: 12px;
+            border-radius: 8px;
             border: 1px solid #ccc;
             margin-bottom: 20px;
             font-size: 15px;
+            transition: 0.3s;
+        }
+        select:focus {
+            border-color: #4CAF50;
+            box-shadow: 0px 0px 6px rgba(76, 175, 80, 0.4);
+            outline: none;
         }
         button {
-            background: #4CAF50;
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
             color: white;
             padding: 12px;
             border: none;
@@ -76,10 +100,19 @@
             cursor: pointer;
             width: 100%;
             font-size: 16px;
+            font-weight: bold;
             transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
         }
         button:hover {
-            background: #45a049;
+            background: linear-gradient(135deg, #43A047, #1B5E20);
+            transform: scale(1.05);
+        }
+        button i {
+            font-size: 18px;
         }
         a {
             display: block;
@@ -88,19 +121,20 @@
             text-decoration: none;
             color: #007BFF;
             font-size: 15px;
+            transition: 0.3s;
         }
         a:hover {
             text-decoration: underline;
-        }
-        .highlight {
-            font-weight: bold;
-            color: #2a7;
+            color: #0056b3;
         }
     </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h2>Enroll Student in a Course</h2>
+        <h2>Enroll Student</h2>
         <p>Enrolling <span class="highlight" th:text="${student.studentname}"></span></p>
 
         <form th:action="@{/students/enroll/{id}(id=${student.studentid})}" method="post">
@@ -113,7 +147,7 @@
                 </option>
             </select>
 
-            <button type="submit">Enroll</button>
+            <button type="submit">📝 Enroll</button>
         </form>
 
         <a th:href="@{/students}">⬅ Back to Student List</a>

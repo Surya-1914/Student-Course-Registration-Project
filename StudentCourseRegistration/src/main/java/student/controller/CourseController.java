@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -55,6 +56,29 @@ public class CourseController
 		}
 		
 		redirectAttributes.addFlashAttribute("sucessMessage", "course added Sucessfully! ");
+		return "redirect:/courses";
+	}
+	
+	@PostMapping("/delete/{id}")
+	public String deleteByCourseId(@PathVariable("id")Long courseId)
+	{
+		courseService.deleteCourseId(courseId);
+		return "redirect:/courses";
+	}
+	
+	
+	@GetMapping("update/{id}")
+	public String getCourseUpdateForm(@PathVariable("id") Long id,Model model) 
+	{
+		model.addAttribute("course", courseService.getCourseId(id));
+		return "CourseDetailsUpdateForm";
+	}
+	
+	@PostMapping("update/{id}")
+	public String UpdatingCourseDetails(@PathVariable("id") Long id,@ModelAttribute("course") Course_Details course_Details) 
+	{
+		course_Details.setCourseid(id);
+		courseService.updateCourseDetails(course_Details);
 		return "redirect:/courses";
 	}
 }

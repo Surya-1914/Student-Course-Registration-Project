@@ -11,5 +11,6 @@ public interface StudentService
     StudentEntity saveStudent(StudentEntity studentEntity);
     void deleteStudentId(Long studentId);
     void enrollStudent(Long studentId, Long courseId);
+    StudentEntity updateByStudent(StudentEntity studentEntity);
 }
 

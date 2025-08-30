@@ -42,7 +42,12 @@ public class CourseServiceImplementaion implements CourseService
 	public void deleteCourseId(Long course_id) 
 	{
 		courseDAO.deleteByCourseId(course_id);
-		
+	}
+
+	@Override
+	public Course_Details updateCourseDetails(Course_Details course_Details) 
+	{
+		return courseDAO.updateCourseDetails(course_Details);
 	}
 
 }

@@ -74,6 +74,30 @@ public class StudentController
 		studentService.enrollStudent(studentId, courseId);
 		return "redirect:/students";
 	}
+	
+	@PostMapping("/delete/{id}")
+	public String deleteByStudentid(@PathVariable("id") Long studentId)
+	{
+		studentService.deleteStudentId(studentId);
+		return "redirect:/students";
+	}
+	
+	@GetMapping("/update/{id}")
+	public String getUpdateForm(@PathVariable("id") Long id,Model model) 
+	{
+		model.addAttribute("student", studentService.getStudentId(id));
+		return "StudentDetailsUpdateForm";
+	}
+	
+	@PostMapping("/update/{id}")
+	public String updateByStudent(@PathVariable("id") Long studentId,@ModelAttribute("student") StudentEntity studentEntity)
+	{
+		studentEntity.setStudentid(studentId);
+		studentService.updateByStudent(studentEntity);
+		return "redirect:/students";
+
+	}
+	
 }
 
 

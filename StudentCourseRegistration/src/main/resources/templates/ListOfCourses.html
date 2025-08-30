@@ -32,6 +32,7 @@
 </html> -->
 
 
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -40,7 +41,7 @@
 <style>
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #74ebd5, #9face6);
+        background: #f0f4ff; /* softer background */
         margin: 0;
         padding: 0;
         display: flex;
@@ -53,15 +54,15 @@
         background: #fff;
         padding: 25px 35px;
         border-radius: 15px;
-        box-shadow: 0px 6px 15px rgba(0,0,0,0.2);
-        width: 80%;
-        max-width: 900px;
+        box-shadow: 0px 6px 15px rgba(0,0,0,0.15);
+        width: 85%;
+        max-width: 1000px;
         animation: fadeIn 0.8s ease-in-out;
     }
 
     h2 {
         text-align: center;
-        color: #4a4a4a;
+        color: #333;
         margin-bottom: 20px;
     }
 
@@ -80,10 +81,11 @@
         font-size: 14px;
         font-weight: bold;
         transition: 0.3s;
+        display: inline-block;
     }
 
     .actions a:hover {
-        background: #574b90;
+        background: #4b44cc;
         transform: scale(1.05);
     }
 
@@ -106,7 +108,7 @@
     }
 
     tr:hover {
-        background-color: #f1f1f1;
+        background-color: #f9f9f9;
         transition: 0.3s;
     }
 
@@ -118,6 +120,50 @@
         display: inline-block;
         font-size: 13px;
         color: #333;
+    }
+
+    /* Action buttons */
+    .action-btn {
+        border: none;
+        padding: 7px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .update-btn {
+        background-color: #4caf50;
+        color: white;
+    }
+
+    .update-btn:hover {
+        background-color: #3d8b41;
+        transform: scale(1.05);
+    }
+
+    .delete-btn {
+        background-color: #f44336;
+        color: white;
+        margin-left: 5px;
+    }
+
+    .delete-btn:hover {
+        background-color: #d32f2f;
+        transform: scale(1.05);
+    }
+
+    /* Success message */
+    .success-msg {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #c3e6cb;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
     }
 
     @keyframes fadeIn {
@@ -135,17 +181,17 @@
         <a th:href="@{/students}">👨‍🎓 View Students</a>
     </div>
 
-	<div th:if="${successMessage}" 
-     style="background-color: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; border: 1px solid #c3e6cb; border-radius: 5px;">
-    <p th:text="${successMessage}"></p>
-	</div>
-	
+    <div th:if="${successMessage}" class="success-msg">
+        <p th:text="${successMessage}"></p>
+    </div>
+
     <table>
-        <thead >
+        <thead>
             <tr>
                 <th>Title</th>
                 <th>Description</th>
                 <th>Enrolled Students</th>
+                <th colspan="2">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -153,7 +199,18 @@
                 <td th:text="${course.title}"></td>
                 <td th:text="${course.description}"></td>
                 <td>
-                    <span th:each="student: ${course.studentDetails}" th:text="${student.studentname}"></span>
+                    <span th:each="student: ${course.studentDetails}" 
+                          th:text="${student.studentname}"></span>
+                </td>
+                <td>
+                    <form th:action="@{/courses/update/{id}(id=${course.courseid})}" method="get">
+                        <button type="submit" class="action-btn update-btn">✏️ Update</button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/courses/delete/{id}(id=${course.courseid})}" method="post">
+                        <button type="submit" class="action-btn delete-btn">🗑 Delete</button>
+                    </form>
                 </td>
             </tr>
         </tbody>
@@ -161,3 +218,4 @@
 </div>
 </body>
 </html>
+ 
