@@ -1,28 +1,4 @@
-<!-- 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Add Course</title>
-</head>
-<body>
-<h2>Add Course</h2>
-<form th:action="@{/courses/save}" th:object="${course}" method="post">
-	<label for="title">Course Title : </label>
-	<input type="text" id="title" th:field="*{title}" required="required"><br><br>
-	
-	<label for="description">Description</label>
-	<textarea id="description" th:field="*{description}"></textarea><br><br>
-	
-	<button type="submit">Save Course</button>
-</form>
-<a th:href="@{/courses}">Back to Courses List</a>
-</body>
-</html>
- -->
- 
- 
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -115,10 +91,10 @@
             color: #555;
             font-size: 14px;
             transition: 0.3s;
+            
         }
         a:hover {
             color: #667eea;
-            text-decoration: underline;
         }
 
         /* Animations */

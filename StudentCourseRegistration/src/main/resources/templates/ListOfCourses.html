@@ -1,38 +1,3 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Courses</title>
-</head>
-<body>
-<h2>Courses</h2>
-<a th:href="@{/courses/add}">+ Add Courses</a> | 
-<a th:href="@{/students}">View Students</a>
-<br>
-<br>
-<table>
-	<thead>
-		<tr>
-			<th>Title</th>
-			<th>Description</th>
-			<th>Enrolled Students</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr th:each="course: ${courses}">
-			<td th:text="${course.title}"></td>
-			<td th:text="${course.description}"></td>
-			<td>
-				<span th:each="student: ${course.studentDetails}" th:text="${student.studentname}+' '"></span>
-			</td>
-		</tr>
-	</tbody>
-</table>
-</body>
-</html> -->
-
-
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -179,6 +144,7 @@
     <div class="actions">
         <a th:href="@{/courses/add}">➕ Add Course</a>
         <a th:href="@{/students}">👨‍🎓 View Students</a>
+        <a th:href="@{/admin/login}" onclick="return confirmLogout()"> 🚪 Logout</a>
     </div>
 
     <div th:if="${successMessage}" class="success-msg">
@@ -209,13 +175,25 @@
                 </td>
                 <td>
                     <form th:action="@{/courses/delete/{id}(id=${course.courseid})}" method="post">
-                        <button type="submit" class="action-btn delete-btn">🗑 Delete</button>
+                        <button type="submit" class="action-btn delete-btn" onclick="return confirmDelete()">🗑 Delete</button>
                     </form>
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
+
+<script>
+	function confirmLogout() 
+	{
+	    return confirm("Are you sure you want to log out?");
+	}
+	
+	function confirmDelete() 
+	{
+	    return confirm("Are you sure you want to Delete?");
+	}
+</script>
 </body>
 </html>
  

@@ -1,25 +1,3 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Add Student</title>
-</head>
-<body>
-<h2>Add Student</h2>
-<form th:action="@{/students/save}" th:object="${student}" method="post">
-	<label for="studentname">Student Name : </label><br>
-	<input type="text" id="studentname" th:field="*{studentname}" required="required"><br><br>
-	
-	<label for="studentemailid">Student Emailid : </label><br>
-	<input type="email" id="studentemailid" th:field="*{studentemailid}" required="required"><br><br>.
-	
-	<button type="submit">Save Student</button>
-</form>
-<a th:href="@{/student}">Back to Students List</a>
-</body>
-</html> -->
-
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -81,7 +59,7 @@
             font-size: 15px;
         }
         a:hover {
-            text-decoration: underline;
+            color: green;
         }
     </style>
 </head>
@@ -107,6 +85,7 @@
         </form>
 
         <a th:href="@{/students}">⬅ Back to Students List</a>
+        
     </div>
 </body>
 </html>

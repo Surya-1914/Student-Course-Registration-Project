@@ -1,29 +1,4 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Enroll Students</title>
-</head>
-<body>
-<h2>Enroll Student in a Course</h2>
-<p>Enrolling<span th:text=" ${student.studentname}"></span></p>
-
-<form th:action="@{'/students/enroll/'+${student.studentid}}" method="post">
-	<label for="courseId">Select a Course : </label>
-	<select id="courseId" name="courseId">
-		<option th:each="course: ${course}"
-				th:value="${course.courseid}"
-				th:text="${course.title}">
-		</option>
-	</select><br><br>
-	
-	<button type="submit">Enroll</button>
-</form>
-<a th:href="@{/students}">Back to Student List</a>
-</body>
-</html> -->
- 
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
