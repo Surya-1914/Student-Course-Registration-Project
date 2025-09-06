@@ -1,18 +1,16 @@
 FROM openjdk:17-jdk-slim
 
-WORKDIR /app
+# Copy Maven wrapper and pom.xml first for dependency caching
+COPY .mvn/wrapper /src/.mvn/wrapper
+COPY pom.xml /src/pom.xml
 
-# Copy Maven wrapper and pom.xml first (for dependency caching)
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline
+# Set the working directory to the source directory
+WORKDIR /src
 
-# Copy source and build
-COPY src ./src
+# Run Maven build to create the JAR file
 RUN ./mvnw package -DskipTests
 
 # Run the built jar
-COPY /src/target/StudentCourseRegistration-0.0.1-SNAPSHOT.jar app.jar
-
+COPY target/StudentCourseRegistration-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
