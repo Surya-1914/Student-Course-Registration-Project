@@ -75,11 +75,21 @@ public class CourseController
 	}
 	
 	@PostMapping("update/{id}")
-	public String UpdatingCourseDetails(@PathVariable("id") Long id,@ModelAttribute("course") Course_Details course_Details) 
+	public String UpdatingCourseDetails(@PathVariable("id") Long id,@ModelAttribute("course") Course_Details course_Details,Model model) 
 	{
-		course_Details.setCourseid(id);
-		courseService.updateCourseDetails(course_Details);
-		return "redirect:/courses";
+		try
+		{
+			course_Details.setCourseid(id);
+			courseService.updateCourseDetails(course_Details);
+			return "redirect:/courses";
+		} 
+		catch (IllegalArgumentException e)
+		{
+			model.addAttribute("course", course_Details);
+			model.addAttribute("errorMessage", e.getMessage());
+			return "CourseDetailsUpdateForm";
+		}
+		
 	}
 }
 

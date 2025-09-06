@@ -10,6 +10,7 @@ public interface CourseRepository extends JpaRepository<Course_Details, Long>
 {
 	Course_Details findByCourseid(Long courseid);
 	boolean existsByTitle(String title);
+	boolean existsByTitleAndCourseidNot(String title, Long courseId);
 	@Transactional
 	void deleteByCourseid(Long courseid);
 }

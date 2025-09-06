@@ -67,6 +67,18 @@ public class StudentServiceImplementation implements StudentService
 	@Override
 	public StudentEntity updateByStudent(StudentEntity studentEntity)
 	{
+//		StudentEntity existing=studentDao.findByStudentId(studentEntity.getStudentid());
+//		
+//		if (studentDao.existsByEmail(studentEntity.getStudentemailid()) && !existing.getStudentemailid().equals(studentEntity.getStudentemailid())) 
+//		{
+//			throw new IllegalArgumentException("Email already exists: " + studentEntity.getStudentemailid());
+//		}
+		
+		if (studentDao.existsByStudentemailidAndStudentidNot(studentEntity.getStudentemailid(), studentEntity.getStudentid()))
+		{
+			throw new IllegalArgumentException("Email already exists: " + studentEntity.getStudentemailid());
+			
+		}
 		return studentDao.updateByStudent(studentEntity);
 	}
 

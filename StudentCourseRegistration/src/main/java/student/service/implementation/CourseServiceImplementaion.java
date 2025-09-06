@@ -47,6 +47,10 @@ public class CourseServiceImplementaion implements CourseService
 	@Override
 	public Course_Details updateCourseDetails(Course_Details course_Details) 
 	{
+		if (courseDAO.existsByTitleAndCourseIdNot(course_Details.getTitle(), course_Details.getCourseid()))
+		{
+			throw new IllegalArgumentException("Course already exists: "+course_Details.getTitle());	
+		}
 		return courseDAO.updateCourseDetails(course_Details);
 	}
 

@@ -52,5 +52,11 @@ public class CourseDAO_Implementation implements courseDAO
 		return courseRepository.save(course_Details);
 	}
 
+	@Override
+	public boolean existsByTitleAndCourseIdNot(String title, Long courseId)
+	{
+		return courseRepository.existsByTitleAndCourseidNot(title, courseId);
+	}
+
 }
 

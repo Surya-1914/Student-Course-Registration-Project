@@ -52,4 +52,10 @@ public class StudentDAO_implementation implements StudentDao
 		return studentRepository.save(studentEntity);
 	}
 
+	@Override
+	public boolean existsByStudentemailidAndStudentidNot(String email, Long studentid)
+	{
+		return studentRepository.existsByStudentemailidAndStudentidNot(email, studentid);
+	}
+
 }

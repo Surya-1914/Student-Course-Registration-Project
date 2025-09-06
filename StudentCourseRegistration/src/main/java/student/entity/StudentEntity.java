@@ -14,6 +14,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,6 +41,10 @@ public class StudentEntity
 	
 	@NotBlank
 	@Email(message = "invalid Message format")
+	@Pattern(
+		    regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
+		    message = "Email must be a valid format like user@example.com"
+		)
 	@Column(name = "student_emailid", nullable = false, unique = true)
 	private String studentemailid;
 	

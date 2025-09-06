@@ -11,6 +11,7 @@ public interface StudentDao
 	void deleteByStudentId(Long id);
 	StudentEntity save(StudentEntity studentEntity);
 	boolean existsByEmail(String emailid);
+	boolean existsByStudentemailidAndStudentidNot(String email, Long studentid);
 	StudentEntity updateByStudent(StudentEntity studentEntity);
 }
 

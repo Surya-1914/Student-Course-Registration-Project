@@ -90,11 +90,21 @@ public class StudentController
 	}
 	
 	@PostMapping("/update/{id}")
-	public String updateByStudent(@PathVariable("id") Long studentId,@ModelAttribute("student") StudentEntity studentEntity)
+	public String updateByStudent(@PathVariable("id") Long studentId,@ModelAttribute("student") StudentEntity studentEntity,Model model)
 	{
-		studentEntity.setStudentid(studentId);
-		studentService.updateByStudent(studentEntity);
-		return "redirect:/students";
+		try 
+		{
+			studentEntity.setStudentid(studentId);
+			studentService.updateByStudent(studentEntity);
+			return "redirect:/students";
+		} 
+		catch (IllegalArgumentException e)
+		{
+			model.addAttribute("student", studentEntity);
+			model.addAttribute("errorMessage", e.getMessage());
+			return "StudentDetailsUpdateForm";
+		}
+		
 
 	}
 	
