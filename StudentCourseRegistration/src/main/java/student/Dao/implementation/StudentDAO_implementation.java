@@ -58,4 +58,22 @@ public class StudentDAO_implementation implements StudentDao
 		return studentRepository.existsByStudentemailidAndStudentidNot(email, studentid);
 	}
 
+	@Override
+	public StudentEntity getByStudentemailidAndPassword(String studentemailid, String password) 
+	{
+		return studentRepository.findByStudentemailidAndPassword(studentemailid, password);
+	}
+
+	@Override
+	public StudentEntity getByStudentemailid(String studentemailid) 
+	{
+		return studentRepository.findByStudentemailid(studentemailid);
+	}
+
+	@Override
+	public StudentEntity findByStudentEmailid(String studentEmailid)
+	{
+		return studentRepository.findByStudentemailid(studentEmailid);
+	}
+
 }

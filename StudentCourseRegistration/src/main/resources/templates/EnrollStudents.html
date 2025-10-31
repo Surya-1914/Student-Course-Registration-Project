@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Enroll Students</title>
+    <link rel="icon" type="image/png" th:href="@{/Project_logo.png}">
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -111,9 +112,9 @@
         <h2>Enroll Student</h2>
         <p>Enrolling <span class="highlight" th:text="${student.studentname}"></span></p>
 
-        <form th:action="@{/students/enroll/{id}(id=${student.studentid})}" method="post">
-            <label for="courseId">Select a Course:</label>
-            <select id="courseId" name="courseId" required>
+        <form th:action="@{/admin/enroll/{id}(id=${student.studentid})}" method="post">
+            <label  for="courseSelect">Select Course:</label>
+    		<select id="courseSelect" name="courseId" required="required">
                 <option value="">-- Choose a Course --</option>
                 <option th:each="course : ${courses}"
                         th:value="${course.courseid}"
@@ -124,7 +125,7 @@
             <button type="submit">📝 Enroll</button>
         </form>
 
-        <a th:href="@{/students}">⬅ Back to Student List</a>
+        <a th:href="@{/admin/studentsList}">⬅ Back to Student List</a>
     </div>
 </body>
 </html>

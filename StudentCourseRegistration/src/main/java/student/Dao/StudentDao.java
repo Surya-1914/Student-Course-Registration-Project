@@ -13,5 +13,8 @@ public interface StudentDao
 	boolean existsByEmail(String emailid);
 	boolean existsByStudentemailidAndStudentidNot(String email, Long studentid);
 	StudentEntity updateByStudent(StudentEntity studentEntity);
+	StudentEntity getByStudentemailidAndPassword(String studentemailid, String password);
+	StudentEntity getByStudentemailid(String studentemailid);
+	StudentEntity findByStudentEmailid(String studentEmailid);
 }
 

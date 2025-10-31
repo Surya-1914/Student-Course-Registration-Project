@@ -2,8 +2,6 @@ package student.entity;
 
 import java.util.Set;
 
-import org.springframework.validation.annotation.Validated;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,14 +16,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Setter
 @Getter
-
 @Table(name="course_details")
 public class Course_Details 
 {

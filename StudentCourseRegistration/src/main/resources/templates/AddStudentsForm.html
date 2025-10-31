@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Student</title>
+    <link rel="icon" type="image/png" th:href="@{/Project_logo.png}">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,7 +30,7 @@
             color: #444;
         }
         input {
-            width: 100%;
+            width: 95%;
             padding: 10px;
             border-radius: 6px;
             border: 1px solid #ccc;
@@ -66,7 +67,7 @@
 <body>
     <div class="container">
         <h2>Add Student</h2>
-        <form th:action="@{/students/save}" th:object="${student}" method="post">
+        <form th:action="@{/admin/save}" th:object="${student}" method="post">
             
             <label for="studentname">Student Name:</label>
             <input type="text" id="studentname" th:field="*{studentname}" required="required">
@@ -81,10 +82,11 @@
 				</div>
 				
     			<br><br>
+    			
             <button type="submit">Save Student</button>
         </form>
 
-        <a th:href="@{/students}">⬅ Back to Students List</a>
+        <a th:href="@{/admin/studentsList}">⬅ Back to Students List</a>
         
     </div>
 </body>

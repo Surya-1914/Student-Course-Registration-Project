@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
@@ -86,6 +86,17 @@
         transform: translateY(-2px);
         border: none;
     }
+    
+    .btn-fourth{
+    	background-color: #FF00FF ;
+        color: white;
+        border: none;
+    }
+    .btn-fourth:hover{
+    	background-color:#CC00CC;
+        transform: translateY(-2px);
+        border: none;
+    }
     #searchInput {
         width: calc(100% - 20px);
         padding: 12px 10px;
@@ -147,34 +158,35 @@
 <body>
 
 <div class="container">
-   <!-- LEFT PANEL -->
+   LEFT PANEL
     <div class="left-panel">
         <h2>Students</h2>
 
-        <!-- Buttons -->
-        <a th:href="@{/students/add}" class="btn btn-primary">+ Add Student</a>
-        <a th:href="@{/courses}" class="btn btn-secondary">View Courses</a>
+        Buttons
+        <a th:href="@{/admin/add}" class="btn btn-primary">+ Add Student</a>
+        <a th:href="@{/courses}" class="btn btn-secondary">📘 View Courses</a>
         <a th:href="@{/admin/login}" class="btn btn-third" onclick="return confirmLogout()">🚪 LogOut</a>
-
-        <!-- Search -->
+		<a th:href="@{/admin/locked}" class="btn btn-fourth">🔒 Manage Locked Students</a>
+		
+        Search
         <input type="text" id="searchInput" placeholder="Search by name...">
 
-        <!-- Student List -->
+        Student List
         <ul id="studentList">
             <li th:each="student : ${students}"
                 th:data-id="${student.studentid}"
                 th:data-email="${student.studentemailid}"
-                th:data-courses="${#strings.listJoin(student.courses.![title], ',')}"
-                th:text="${student.studentname}">
+                th:data-courses="${student.courses != null and student.courses.size() > 0 ? #strings.listJoin(student.courses.![title], ',') : ''}" 
+                th:text="${student.studentname}" >
                 
-                <!-- <form th:action="@/delete/{id}">
+                <form th:action="@/delete/{id}">
                 	<button type="submit">Delete</button>
-                </form> -->
+                </form>
             </li>
         </ul>
     </div>
 
-    <!-- RIGHT PANEL -->
+    RIGHT PANEL
     <div class="right-panel">
         <div id="studentDetails" class="show">
             <h3 id="welcomeMessage">Select a student to see details</h3>
@@ -203,15 +215,19 @@
                 <ul>
                     ${courses.length > 0 ? courses.map(c => `<li>${c}</li>`).join('') : "<li>No courses enrolled</li>"}
                 </ul>
-                <a href="/students/enroll/${id}" class="btn btn-primary">📝 Enroll</a>
+                <a href="/admin/enroll/${id}" class="btn btn-primary">📝 Enroll</a>
                 
-            	<form action="/students/update/${id}" method="get" style="display:inline;">
+            	<form action="/admin/update/${id}" method="get" style="display:inline;">
         			<button type="submit" class="btn btn-secondary">✏️ Update</button>
         		</form>
         		
-        		<form action="/students/delete/${id}" method="post" style="display:inline;" onclick="return confirmDelete()">
+        		<form action="/admin/delete/${id}" method="post" style="display:inline;" onclick="return confirmDelete()">
         			<button type="submit" class="btn btn-third">🗑 Delete</button>
         		</form>
+        		
+        		<form action="/admin/unenroll/{id}" method="get" style="display:inline;" onclick="">
+    			<button type="submit" class="btn btn-fourth">Unenroll</button>
+    		</form>
             `;
             studentDetails.classList.add('show');
         }, 200);
@@ -247,3 +263,459 @@
 </html>
 
 
+ -->
+ 
+ 
+ 
+
+ 
+ 
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+<link rel="icon" type="image/png" th:href="@{/Project_logo.png}">
+<style>
+    /* --- Global Styles --- */
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f4f7f9;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .container {
+        display: flex;
+        width: 95%;
+        max-width: 1400px;
+        min-height: 85vh;
+        background-color: #fff;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .left-panel {
+        flex: 1.2;
+        max-width: 300px;
+        padding: 30px;
+        border-right: 1px solid #e0eeef;
+        background-color: #f8fcfd;
+        overflow-y: auto;
+    }
+
+    .right-panel {
+        flex: 2.5;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        background-color: #ffffff;
+        overflow-y: auto;
+    }
+
+    h2, h3 {
+        color: #007bff;
+    }
+
+    /* --- Button Styles (Modernized) --- */
+    .btn {
+        display: inline-block;
+        padding: 10px 15px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        white-space: nowrap;
+        box-sizing: border-box; /* Ensure padding doesn't affect flex layout */
+    }
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+    .btn-action-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 25px;
+    }
+    /* Ensure action buttons in the detail card take up appropriate space */
+    #studentDetailsCard .btn-action-group a {
+        flex-basis: calc(50% - 5px); /* Max two buttons per row */
+        max-width: 200px;
+    }
+    .btn-primary { background-color: #007bff; color: white; border: none; }
+    .btn-primary:hover { background-color: #0056b3; }
+    .btn-secondary { background-color: #28a745; color: white; border: none; }
+    .btn-secondary:hover { background-color: #1e7e34; }
+    .btn-third { background-color: #dc3545; color: white; border: none; }
+    .btn-third:hover { background-color: #bd2130; }
+    .btn-fourth { background-color: #ffc107; color: #343a40; border: none; }
+    .btn-fourth:hover { background-color: #e0a800; }
+
+    /* --- Icon Menu (Kept interactive) --- */
+    #iconMenu {
+        display: flex;
+        gap: 0px;
+        padding: 0;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .icon-menu-item {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        padding: 10px 0;
+        color: #333;
+        font-size: 16px;
+        background-color: #f8fcfd;
+        border-right: 1px solid #ddd;
+        transition: flex-grow 0.4s ease, background-color 0.2s, color 0.2s;
+    }
+    .icon-menu-item:hover {
+        flex-grow: 10;
+        background-color: #eaf6ff;
+        color: #007bff;
+        padding: 10px 15px;
+    }
+    .icon-menu-item .icon { font-size: 20px; padding: 0 5px; }
+    .icon-menu-item .label {
+        max-width: 0; opacity: 0; overflow: hidden; margin-left: 0;
+        transition: max-width 0.4s, opacity 0.3s, margin-left 0.4s;
+    }
+    .icon-menu-item:hover .label {
+        max-width: 200px; opacity: 1; margin-left: 10px; color: #007bff;
+    }
+
+    /* --- Search and Student List --- */
+    #searchInput {
+        width: calc(100% - 20px);
+        padding: 12px 10px;
+        margin: 15px 0;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+    #studentList { list-style-type: none; padding: 0; margin: 0; }
+    #studentList li {
+        padding: 15px;
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+        transition: background-color 0.2s, border-left 0.2s;
+        border-radius: 6px;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #34495e;
+        font-size: 16px;
+        border-left: 4px solid transparent;
+    }
+    #studentList li:hover { background-color: #e9ecef; }
+    /* Highlight selected student */
+    #studentList li.selected {
+        background-color: #e0f2f7;
+        border-left: 4px solid #007bff;
+    }
+
+    /* --- Right Panel Content Management --- */
+
+    /* Container for the welcome message/summary */
+    #initialDashboard {
+        width: 100%;
+        max-width: 600px;
+        text-align: center;
+        padding: 20px;
+        display: none; /* KEY: Initially hidden via JS now */
+        animation: fadeInUp 0.5s ease;
+    }
+    
+    /* Container for the student card */
+    #studentDetailsCard {
+        width: 100%;
+        max-width: 550px;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        text-align: left;
+        display: none; /* KEY: Always controlled by JS */
+        animation: fadeInUp 0.5s ease;
+    }
+    
+    /* Simple centered message for the initial blank state */
+    #blankStateMessage {
+        padding: 100px 20px;
+        font-size: 1.2em;
+        color: #6c757d;
+        animation: fadeIn 1s ease;
+    }
+
+    /* Stats Cards */
+    .stats-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 25px;
+    }
+    .stat-card {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        color: white;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+        width: 160px;
+        transition: transform 0.3s ease;
+    }
+    .stat-card h3 { color: white; font-size: 2em; margin: 0 0 5px 0; }
+    .stat-card p { font-size: 0.9em; margin: 0; opacity: 0.8; }
+
+    /* Student Details Specifics */
+    #studentDetailsCard h3 {
+        font-size: 26px;
+        text-align: center;
+        border-bottom: 1px solid #e0eeef;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+    #studentDetailsCard p {
+        font-size: 16px;
+        margin-bottom: 10px;
+        padding: 5px 0;
+        border-bottom: 1px dashed #f0f0f0;
+    }
+    #studentDetailsCard strong { color: #34495e; font-weight: 700; }
+    #studentDetailsCard ul { list-style: none; padding: 0; margin-top: 10px; }
+    #studentDetailsCard ul li {
+        background: #e8f0fe;
+        color: #007bff;
+        padding: 6px 10px;
+        border-radius: 4px;
+        margin-bottom: 5px;
+        font-size: 0.9em;
+        display: inline-block;
+        margin-right: 5px;
+    }
+    #studentDetailsCard ul li:last-child { margin-bottom: 15px; }
+
+    /* Animation */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="left-panel">
+            <h2>Admin Panel</h2>
+
+            <nav id="iconMenu">
+                <a th:href="@{/admin/add}" class="icon-menu-item">
+                    <span class="icon">➕</span>
+                    <span class="label">Add Student</span>
+                </a>
+
+                <a th:href="@{/courses}" class="icon-menu-item">
+                    <span class="icon">📘</span>
+                    <span class="label">View Courses</span>
+                </a>
+
+                <a th:href="@{/admin/locked}" class="icon-menu-item">
+                    <span class="icon">🔒</span>
+                    <span class="label">Locked Students</span>
+                </a>
+
+                <a th:href="@{/admin/change-password}" class="icon-menu-item">
+                    <span class="icon">⚙️</span>
+                    <span class="label">Change Password</span>
+                </a>
+
+                <a th:href="@{/admin/login}" class="icon-menu-item" onclick="return confirmLogout()">
+                    <span class="icon">🚪</span>
+                    <span class="label">Logout</span>
+                </a>
+            </nav>
+
+            <input type="text" id="searchInput" placeholder="Search by name...">
+
+            <ul id="studentList">
+                <li th:each="student : ${students}"
+                    th:data-id="${student.studentid}"
+                    th:data-email="${student.studentemailid}"
+                    th:data-courses="${student.courses != null and student.courses.size() > 0 ? #strings.listJoin(student.courses.![title], ',') : ''}"
+                    th:text="${student.studentname}">
+                </li>
+            </ul>
+        </div>
+
+        <div class="right-panel">
+            
+            <div id="initialDashboard">
+                <h2 id="greetingText">Welcome, Admin 👋</h2>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h3 th:text="${students.size()}">0</h3>
+                        <p>Total Students</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 th:text="${enrolledCount}">0</h3>
+                        <p>Enrolled</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 th:text="${lockedCount}">0</h3>
+                        <p>Locked</p>
+                    </div>
+                </div>
+                
+                <div class="quick-actions" style="margin-top: 40px; background-color: #f7f7f7; border-radius: 10px; padding: 20px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);">
+                    <h3 style="color: #007bff; margin-bottom: 15px;">⚡ Quick Actions</h3>
+                    <div class="btn-action-group">
+                        <a th:href="@{/admin/add}" class="btn btn-primary">➕ Add Student</a>
+                        <a th:href="@{/courses}" class="btn btn-secondary">📘 Courses</a>
+                        <a th:href="@{/admin/locked}" class="btn btn-third">🔒 Locked</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="blankStateMessage">
+               <!--  <h3 style="color:#007bff;">Select a student from the list to view their profile and management options.</h3> -->
+            </div>
+
+            <div id="studentDetailsCard">
+                </div>
+            
+        </div>
+    </div>
+
+    <script>
+        const studentList = document.getElementById('studentList');
+        const initialDashboard = document.getElementById('initialDashboard');
+        const studentDetailsCard = document.getElementById('studentDetailsCard');
+        const blankStateMessage = document.getElementById('blankStateMessage');
+        const searchInput = document.getElementById('searchInput');
+
+        // Function to control which element is visible in the right panel
+        function setRightPanelContent(state) {
+            initialDashboard.style.display = 'none';
+            studentDetailsCard.style.display = 'none';
+            blankStateMessage.style.display = 'none';
+
+            if (state === 'dashboard') {
+                initialDashboard.style.display = 'block';
+            } else if (state === 'details') {
+                studentDetailsCard.style.display = 'block';
+            } else { // 'blank' or any other state
+                blankStateMessage.style.display = 'block';
+            }
+        }
+        
+        // Initial state: blank panel
+        document.addEventListener('DOMContentLoaded', () => {
+            // NOTE: The dashboard content is great, but based on the request, 
+            // we will show the simple blank message by default.
+            setRightPanelContent('blank');
+            updateGreeting();
+        });
+
+
+        // Time-based greeting
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            let greeting;
+            if (hour < 12) greeting = "Good Morning 🌅";
+            else if (hour < 17) greeting = "Good Afternoon ☀️";
+            else greeting = "Good Evening 🌇";
+            
+            // This is only relevant if we show the dashboard
+            const greetingElement = document.getElementById("greetingText");
+            if (greetingElement) {
+                greetingElement.innerText = greeting + ", Admin 👋";
+            }
+        }
+
+        // Show student details dynamically
+        function showStudentDetails(li) {
+            const id = li.dataset.id;
+            const name = li.textContent.trim();
+            const email = li.dataset.email;
+            const courses = li.dataset.courses ? li.dataset.courses.split(",").map(c => c.trim()).filter(c => c.length > 0) : [];
+
+            // Switch view to details card
+            setRightPanelContent('details');
+
+            // 2. Clear and populate the card
+            studentDetailsCard.innerHTML = `
+                <h3>${name}'s Profile 📘</h3>
+                <p><strong>ID:</strong> ${id}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p style="margin-bottom: 5px;"><strong>Courses Enrolled:</strong></p>
+                <ul>
+                    ${courses.length > 0 ? courses.map(c => `<li>${c}</li>`).join('') : "<li>No courses enrolled</li>"}
+                </ul>
+                <div class="btn-action-group">
+                    <a href="/admin/enroll/${id}" class="btn btn-primary">📝 Enroll</a>
+                    <a href="/admin/update/${id}" class="btn btn-secondary">✏️ Update</a>
+                    <a href="/admin/unenroll/${id}" class="btn btn-fourth">🚫 Unenroll</a>
+                    <a href="/admin/delete/${id}" class="btn btn-third" onclick="return confirmDelete('${name}')">🗑 Delete</a>
+                </div>
+            `;
+        }
+
+        // Student click handler
+        studentList.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if (li) {
+                // Remove 'selected' class from all, add to clicked item
+                document.querySelectorAll('#studentList li').forEach(item => item.classList.remove('selected'));
+                li.classList.add('selected');
+                
+                showStudentDetails(li);
+            }
+        });
+
+        // Search filter
+        searchInput.addEventListener('keyup', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const students = studentList.querySelectorAll('li');
+            students.forEach(li => {
+                const name = li.textContent.toLowerCase();
+                const email = li.dataset.email.toLowerCase();
+                li.style.display = (name.includes(searchTerm) || email.includes(searchTerm)) ? '' : 'none';
+            });
+        });
+
+
+        // Confirmation functions
+        function confirmLogout() {
+            return confirm("Are you sure you want to log out?");
+        }
+
+        function confirmDelete(studentName) {
+            return confirm(`Are you sure you want to delete the student: ${studentName}? This action cannot be undone.`);
+        }
+    </script>
+
+</body>
+</html>

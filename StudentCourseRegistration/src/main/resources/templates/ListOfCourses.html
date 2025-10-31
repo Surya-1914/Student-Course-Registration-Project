@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Courses</title>
+
 <style>
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -143,7 +144,7 @@
 
     <div class="actions">
         <a th:href="@{/courses/add}">➕ Add Course</a>
-        <a th:href="@{/students}">👨‍🎓 View Students</a>
+        <a th:href="@{/students/list}">👨‍🎓 View Students</a>
         <a th:href="@{/admin/login}" onclick="return confirmLogout()"> 🚪 Logout</a>
     </div>
 
@@ -196,4 +197,241 @@
 </script>
 </body>
 </html>
- 
+  -->
+  
+  
+  
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Courses</title>
+<link rel="icon" type="image/png" th:href="@{/Project_logo.png}">
+
+<style>
+    /* --- Existing CSS --- */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f4ff; /* softer background */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .container {
+        background: #fff;
+        padding: 25px 35px;
+        border-radius: 15px;
+        box-shadow: 0px 6px 15px rgba(0,0,0,0.15);
+        /* Adjusted width for better fit and border containment */
+        width: 95%; 
+        max-width: 950px; 
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .actions {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .actions a {
+        text-decoration: none;
+        background: #6c63ff;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 10px;
+        margin: 0 8px;
+        font-size: 14px;
+        font-weight: bold;
+        transition: 0.3s;
+        display: inline-block;
+    }
+
+    .actions a:hover {
+        background: #4b44cc;
+        transform: scale(1.05);
+    }
+
+    table {
+        width: 100%;
+        /* Ensures table fits perfectly inside the parent container */
+        max-width: 100%; 
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    /* === TABLE LAYOUT ADJUSTMENTS === */
+
+    /* Core fix for text overflow in data cells (Description column) */
+    td {
+        word-wrap: break-word; 
+        overflow-wrap: break-word;
+    }
+
+    th {
+        background-color: #6c63ff;
+        color: white;
+        font-size: 15px;
+        white-space: nowrap; 
+    }
+    
+    /* Suggested widths for better column proportioning */
+    th:nth-child(1) { width: 25%; } /* 📚 Title */
+    th:nth-child(2) { width: 35%; } /* 📝 Description */
+    th:nth-child(3) { width: 20%; } /* 🧑‍🤝‍🧑 Enrolled Students */
+    th:nth-child(4) { width: 20%; } /* Actions (colspan=2) */
+    
+    /* Fix for icon spacing in the header */
+    th:not(:last-child)::first-letter {
+        padding-right: 5px; 
+    }
+    
+    /* === END TABLE LAYOUT ADJUSTMENTS === */
+
+    tr:hover {
+        background-color: #f9f9f9;
+        transition: 0.3s;
+    }
+
+    td span {
+        background: #e0e7ff;
+        padding: 4px 8px;
+        border-radius: 6px;
+        margin: 2px;
+        display: inline-block;
+        font-size: 13px;
+        color: #333;
+    }
+
+    /* Action buttons */
+    .action-btn {
+        border: none;
+        padding: 7px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .update-btn {
+        background-color: #4caf50;
+        color: white;
+    }
+
+    .update-btn:hover {
+        background-color: #3d8b41;
+        transform: scale(1.05);
+    }
+
+    .delete-btn {
+        background-color: #f44336;
+        color: white;
+        margin-left: 5px;
+    }
+
+    .delete-btn:hover {
+        background-color: #d32f2f;
+        transform: scale(1.05);
+    }
+
+    /* Success message */
+    .success-msg {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #c3e6cb;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>📘 Courses</h2>
+
+    <div class="actions">
+        <a th:href="@{/courses/add}">➕ Add Course</a>
+        <a th:href="@{/admin/studentsList}">👨‍🎓 View Students</a>
+        <a th:href="@{/admin/login}" onclick="return confirmLogout()"> 🚪 Logout</a>
+    </div>
+
+    <div th:if="${successMessage}" class="success-msg">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>📚 Title</th>
+                
+                <th>📝 Description</th>
+                
+                <th>🧑‍🤝‍🧑 Enrolled Students</th>
+                
+                <th colspan="2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="course: ${courses}">
+                <td th:text="${course.title}"></td>
+                <td th:text="${course.description}"></td>
+                <td>
+                    <span th:each="student: ${course.studentDetails}" 
+                          th:text="${student.studentname}"></span>
+                </td>
+                <td>
+                    <form th:action="@{/courses/update/{id}(id=${course.courseid})}" method="get">
+                        <button type="submit" class="action-btn update-btn">✏️ Update</button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/courses/delete/{id}(id=${course.courseid})}" method="post">
+                        <button type="submit" class="action-btn delete-btn" onclick="return confirmDelete()">🗑 Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+	function confirmLogout() 
+	{
+	    return confirm("Are you sure you want to log out?");
+	}
+	
+	function confirmDelete() 
+	{
+	    return confirm("Are you sure you want to Delete?");
+	}
+</script>
+</body>
+</html>

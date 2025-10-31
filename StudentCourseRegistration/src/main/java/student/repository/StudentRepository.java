@@ -3,6 +3,8 @@ package student.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import student.entity.StudentEntity;
+import java.util.List;
+
 
 
 public interface StudentRepository extends JpaRepository<StudentEntity, Long>
@@ -12,5 +14,7 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Long>
 	boolean existsByStudentemailidAndStudentidNot(String email, Long studentid);
 	void deleteByStudentid(Long studentid);
 	
+	StudentEntity findByStudentemailidAndPassword(String studentemailid, String password);
+	StudentEntity findByStudentemailid(String studentemailid);
 }
 
